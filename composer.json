@@ -1,0 +1,15 @@
+{
+    "name": "aurelie/simple-mvc",
+    "authors": [
+        {
+            "name": "Aurelie",
+            "email": "gramusset.a@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "require": {}
+}
