@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Model\ItemManager;
+use View\View;
 
 class ItemController
 {
@@ -10,9 +11,11 @@ class ItemController
     {
         $itemManager = new ItemManager();
         $items =  $itemManager->selectAllItems();
-        require __DIR__ . '/../View/Item/index.php';
 
-        return $items;
+        $view = new View();
+        return $view->render(__DIR__ . '/../View/Item/index.php', [
+            'items' => $items,
+        ]);
     }
 
     public function show(int $id) : array
