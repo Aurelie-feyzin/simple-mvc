@@ -2,29 +2,30 @@
 
 namespace Model;
 
-// connection BDD (définir les constantes dans un fichier app.php qui sera inclus)
-require __DIR__ . '/../../app/db.php';
-
-class CategoryManager
+class CategoryManager extends AbstractManager
 {
-    public function selectAllCategories()
-    {
-        $pdo = new \PDO(DSN, USER, PASS);
-        $query = "SELECT * FROM category";
-        $categories = $pdo->query($query);
+    const TABLE = 'category';
 
-        return $categories->fetchAll();
+    public function __construct(\PDO $pdo)
+    {
+        parent::__construct(self::TABLE, $pdo);
     }
 
-    public function selectOneCategory($id)
+    public function insert(Category $category): int
     {
-        $pdo = new \PDO(DSN, USER, PASS);
-        $query = 'SELECT * FROM category WHERE id = :id';
-        $statement = $pdo->prepare($query);
-        $statement->bindValue(":id", $id, \PDO::PARAM_INT);
-        $statement->execute();
+        $statement = $this->pdo->prepare('INSERT INTO ' . self::TABLE . " (`name`) VALUES (:name)" );
+        $statement->bindValue('name', $category->getTitle(), \PDO::PARAM_STR);
+        if ($statement->execute()) {
+            return $this->pdo->lastInsertId();
+        }
+    }
 
-        return $statement->fetch();
+    public function update(Category $category)
+    {
+        $statement = $this->pdo->prepare('UPDATE ' . self::TABLE . " SET `name` =:name WHERE id =:id" );
+        $statement->bindValue('id', $category->getId(), \PDO::PARAM_INT);
+        $statement->bindValue('name', $category->getName(), \PDO::PARAM_STR);
+        return $statement->execute();
     }
 
 }

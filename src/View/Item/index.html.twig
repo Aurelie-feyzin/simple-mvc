@@ -5,12 +5,20 @@
 
 {% block content %}
     <section>
-        <h1>Items</h1>
-        <ul>
+        <h1 class="text-center">Liste des Items</h1>
+        <table class="table">
+            <tbody>
             {% for item in items %}
-                <li>{{ item.title }}</li>
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td><a class="" href="item/{{ item.id }}">{{ item.title }}</a></td>
+                    <td><a class="badge badge-secondary" href="item/edit/{{ item.id }}">editer</a></td>
+                    <td><a class="badge badge-danger" href="item/delete/{{ item.id }}">supprimer</a></td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
+        <a class="btn btn-primary" href="/item/add">Ajouter un item</a>
     </section>
 {% endblock %}
 

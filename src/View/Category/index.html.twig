@@ -5,11 +5,19 @@ List all categories
 
 {% block content %}
 <section>
-    <h1>Categories</h1>
-    <ul>
+    <h1 class="text-center">Listes des Categories</h1>
+    <table class="table">
+        <tbody>
         {% for category in categories %}
-        <li>{{ category.name }}</li>
+            <tr>
+                <td>{{ category.id }}</td>
+                <td><a class="" href="category/{{ category.id }}">{{ category.name }}</a></td>
+                <td><a class="badge badge-secondary" href="category/edit/{{ category.id }}">editer</a></td>
+                <td><a class="badge badge-danger" href="category/delete/{{ category.id }}">supprimer</a></td>
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
+    <a class="btn btn-primary" href="/category/add">Ajouter une category</a>
 </section>
 {% endblock %}

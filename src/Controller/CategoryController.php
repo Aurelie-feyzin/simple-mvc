@@ -3,24 +3,20 @@
 namespace Controller;
 
 use Model\CategoryManager;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
 
-
-class CategoryController
+class CategoryController extends AbstractController
 {
-    private $twig;
+    private $categoryManager;
 
     public function __construct()
     {
-        $loader = new Twig_Loader_Filesystem( __DIR__ . '/../View');
-        $this->twig = new Twig_Environment($loader);
+        parent::__construct();
+        $this->categoryManager = new CategoryManager($this->pdo);
     }
 
     public function index()
     {
-        $categoryManager = new CategoryManager();
-        $categories = $categoryManager->selectAllCategories();
+        $categories = $this->categoryManager->selectAll();
 
         return $this->twig->render('Category/index.html.twig', [
             'categories' => $categories,
@@ -29,12 +25,45 @@ class CategoryController
 
     public function show($id)
     {
-        $categoryManager = new CategoryManager();
-        $category = $categoryManager->selectOneCategory($id);
+        $category = $this->categoryManager->selectOneById($id);
 
         return $this->twig->render('Category/show.html.twig', [
             'category' => $category,
         ]);
+    }
+
+    public function add()
+    {
+        if(!empty($_POST)) {
+            $category = new Category();
+            $category->setTitle($_POST['name']);
+
+            $this->categoryManager->insert($category);
+            header('Location: /category');
+            exit();
+        }
+        return $this->twig->render(('Category/add.html.twig'));
+    }
+
+    public function edit($id)
+    {
+        $category = $this->categoryManager->selectOneById($id);
+        if(!empty($_POST)) {
+            $category->setName($_POST['name']);
+            $this->categoryManager->update($category);
+            return $this->twig->render('Category/show.html.twig', [
+                'category' => $category,
+            ]);
+        }
+        return $this->twig->render('Category/edit.html.twig', [
+            'category' => $category,
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $this->categoryManager->delete($id);
+        header('Location: /categories');
     }
 
 }
