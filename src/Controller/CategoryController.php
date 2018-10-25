@@ -34,7 +34,7 @@ class CategoryController extends AbstractController
 
     public function add()
     {
-        if(!empty($_POST)) {
+        if(!empty($_POST) && !empty($_POST['name'])) {
             $category = new Category();
             $category->setTitle($_POST['name']);
 
@@ -48,7 +48,7 @@ class CategoryController extends AbstractController
     public function edit($id)
     {
         $category = $this->categoryManager->selectOneById($id);
-        if(!empty($_POST)) {
+        if(!empty($_POST) && !empty($_POST['name'])) {
             $category->setName($_POST['name']);
             $this->categoryManager->update($category);
             return $this->twig->render('Category/show.html.twig', [

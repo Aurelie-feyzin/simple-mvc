@@ -34,13 +34,13 @@ class ItemController extends AbstractController
 
     public function add()
     {
-        if(!empty($_POST)) {
-            $item = new Item();
-            $item->setTitle($_POST['title']);
+        if(!empty($_POST) && !empty($_POST['title'])) {
+                $item = new Item();
+                $item->setTitle($_POST['title']);
 
-            $this->itemManager->insert($item);
-            header('Location: /');
-            exit();
+                $this->itemManager->insert($item);
+                header('Location: /');
+                exit();
         }
         return $this->twig->render(('Item/add.html.twig'));
     }
@@ -48,7 +48,7 @@ class ItemController extends AbstractController
     public function edit($id)
     {
         $item = $this->itemManager->selectOneById($id);
-        if(!empty($_POST)) {
+        if(!empty($_POST) && !empty($_POST['title'])) {
             $item->setTitle($_POST['title']);
             $this->itemManager->update($item);
             return $this->twig->render('Item/show.html.twig', [
